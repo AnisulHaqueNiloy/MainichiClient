@@ -1,23 +1,38 @@
+import { useState } from "react";
 import {
   useGetProductsQuery,
   useDeleteProductMutation,
 } from "@/redux/features/admin/products";
-import { Edit, Trash2, Plus, Package } from "lucide-react";
+import {
+  Edit,
+  Trash2,
+  Plus,
+  Package,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const ProductList = () => {
-  const { data, isLoading, isError } = useGetProductsQuery({});
+  // 1. Pagination State (Backend logic er sathe mil rekhe)
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 10;
+
+  // 2. API Call with page & limit
+  const { data, isLoading, isError } = useGetProductsQuery({
+    page: currentPage,
+    limit: limit,
+  });
+
   const [deleteProduct] = useDeleteProductMutation();
 
-  // ✅ FIX: Casting as any[] to solve .map and .length errors
-  const products = ((data as any)?.data as any[]) || [];
-  console.log(products);
-  const totalCount = (data as any)?.meta.totalCount || 0;
-  console.log(data);
+  // 3. Data Extraction (Backend structure: { products, totalCount, totalPages })
+  const products = data?.products || [];
+  const totalCount = data?.totalCount || 0;
+  const totalPages = data?.totalPages || 1;
 
-  // ✅ SweetAlert2 Delete Handler
   const handleDelete = async (id: string) => {
     Swal.fire({
       title: "Are you sure?",
@@ -193,14 +208,12 @@ const ProductList = () => {
                       <Link
                         to={`/admin/edit-product/${product._id}`}
                         className="p-2.5 bg-gray-50 text-gray-400 hover:bg-blue-50 hover:text-blue-500 rounded-2xl transition-all shadow-sm"
-                        title="Edit"
                       >
                         <Edit size={16} />
                       </Link>
                       <button
                         onClick={() => handleDelete(product._id)}
                         className="p-2.5 bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 rounded-2xl transition-all shadow-sm"
-                        title="Delete"
                       >
                         <Trash2 size={16} />
                       </button>
@@ -212,37 +225,54 @@ const ProductList = () => {
           </table>
         </div>
 
-        {/* Empty State */}
+        {/* --- Empty State --- */}
         {products.length === 0 && (
           <div className="p-24 text-center">
             <Package size={48} className="mx-auto text-gray-200 mb-4" />
             <h3 className="text-xl font-black text-gray-800 tracking-tight">
               No Products Found
             </h3>
-            <p className="text-sm text-gray-400 mt-1 mb-8">
-              Your inventory is currently empty.
-            </p>
             <Link
               to="/admin/add-product"
-              className="btn bg-[#1F5E3B] text-white border-none rounded-2xl px-8"
+              className="btn bg-[#1F5E3B] text-white border-none rounded-2xl px-8 mt-4"
             >
               Add First Item
             </Link>
           </div>
         )}
 
-        {/* --- Pagination --- */}
+        {/* --- Full Pagination Logic --- */}
         <div className="p-8 bg-[#F8FAF8]/50 flex items-center justify-between border-t border-gray-50">
           <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-            Displaying {products.length} of {totalCount} Records
+            Showing {(currentPage - 1) * limit + 1} to{" "}
+            {Math.min(currentPage * limit, totalCount)} of {totalCount} Records
           </p>
-          <div className="flex gap-2">
-            <button className="h-10 w-10 flex items-center justify-center bg-white border border-gray-100 rounded-xl hover:bg-[#1F5E3B] hover:text-white transition-all shadow-sm">
-              &lt;
-            </button>
-            <button className="h-10 w-10 flex items-center justify-center bg-white border border-gray-100 rounded-xl hover:bg-[#1F5E3B] hover:text-white transition-all shadow-sm">
-              &gt;
-            </button>
+
+          <div className="flex items-center gap-4">
+            {/* Page Indicator */}
+            <span className="text-xs font-bold text-gray-500">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            <div className="flex gap-2">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                className={`h-10 w-10 flex items-center justify-center bg-white border border-gray-100 rounded-xl transition-all shadow-sm
+                  ${currentPage === 1 ? "opacity-30 cursor-not-allowed" : "hover:bg-[#1F5E3B] hover:text-white"}`}
+              >
+                <ChevronLeft size={18} />
+              </button>
+
+              <button
+                disabled={currentPage >= totalPages}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                className={`h-10 w-10 flex items-center justify-center bg-white border border-gray-100 rounded-xl transition-all shadow-sm
+                  ${currentPage >= totalPages ? "opacity-30 cursor-not-allowed" : "hover:bg-[#1F5E3B] hover:text-white"}`}
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
           </div>
         </div>
       </div>

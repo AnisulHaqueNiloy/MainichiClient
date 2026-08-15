@@ -59,6 +59,8 @@ const Navbar = () => {
   const { data: categories, isLoading: isCatLoading } =
     useGetCategoriesQuery(undefined);
 
+  console.log(categories);
+
   // --- Search Handler ---
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

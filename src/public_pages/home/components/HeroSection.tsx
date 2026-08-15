@@ -6,7 +6,7 @@ import { useGetCategoriesQuery } from "@/redux/features/admin/category";
 import { useGetOfferQuery } from "@/redux/features/admin/offer";
 import { useGetBannersQuery } from "@/redux/features/admin/bannerApi"; // Dynamic Banner API
 import { Loader2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const IMG_URL = import.meta.env.VITE_API_URL;
 
@@ -158,15 +158,20 @@ const HeroSection = () => {
                     </p>
                   )}
                   <div className="flex flex-col md:flex-row items-center gap-4 pt-4">
-                    <Button className="bg-[#1F5E3B] hover:bg-[#16432a] text-white rounded-full px-10 h-14 text-lg font-bold shadow-xl transition-transform hover:scale-105">
-                      Start Shopping
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="bg-white/10 backdrop-blur-md border-white/30 text-white rounded-full px-10 h-14 text-lg font-bold hover:bg-white hover:text-black transition-all shadow-xl"
-                    >
-                      View Offers
-                    </Button>
+                    <NavLink to="all_products" className="cursor-pointer">
+                      <Button className="cursor-pointer bg-[#1F5E3B] hover:bg-[#16432a] text-white rounded-full px-10 h-14 text-lg font-bold shadow-xl transition-transform hover:scale-105">
+                        Start Shopping
+                      </Button>
+                    </NavLink>
+
+                    <NavLink to="all_products" className="cursor-pointer">
+                      <Button
+                        variant="outline"
+                        className="bg-white/10 backdrop-blur-md border-white/30 text-white rounded-full px-10 h-14 text-lg font-bold hover:bg-white hover:text-black transition-all shadow-xl"
+                      >
+                        View Offers
+                      </Button>
+                    </NavLink>
                   </div>
                 </div>
               </div>

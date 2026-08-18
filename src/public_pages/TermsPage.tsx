@@ -19,7 +19,7 @@ const TermsPage = () => {
           <div>
             <h3 className="font-bold text-2xl mb-4">Payment Terms</h3>
             <p className="text-gray-600 leading-relaxed mb-4">
-              At <strong>Japan Halal Food</strong>, we prioritize your
+              At <strong>Mainichi Halal Shop</strong>, we prioritize your
               convenience. Regardless of your preferred online ordering method,
               we operate on a<strong> Cash-on-Delivery (COD)</strong> basis.
             </p>
@@ -70,7 +70,7 @@ const TermsPage = () => {
       </div>
 
       <footer className="mt-16 pt-8 border-t border-gray-200 text-center text-gray-400 text-sm">
-        <p>© 2026 Japan Halal Food. All Rights Reserved.</p>
+        <p>© 2026 Mainichi Halal Shop. All Rights Reserved.</p>
       </footer>
     </div>
   );

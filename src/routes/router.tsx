@@ -27,6 +27,7 @@ import ReturnPolicy from "@/public_pages/ReturnPolicy/ReturnPolicy";
 import TermsPage from "@/public_pages/TermsPage";
 import Contact from "@/public_pages/Contact";
 import { useEffect } from "react";
+import PrivacyPolicyPage from "../public_pages/PrivacyPolicyPage";
 function ErrorBoundary() {
   useEffect(() => {
     window.location.reload();
@@ -71,6 +72,10 @@ export const router = createBrowserRouter([
       {
         path: "terms",
         element: <TermsPage />,
+      },
+      {
+        path: "privacy-policy",
+        element: <PrivacyPolicyPage />,
       },
       {
         path: "contact",

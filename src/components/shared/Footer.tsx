@@ -85,6 +85,10 @@ const Footer = () => {
               <li className="hover:text-[#1F5E3B] cursor-pointer transition-colors">
                 <Link to="/terms">Terms & Conditions</Link>
               </li>
+
+              <li className="hover:text-[#1F5E3B] cursor-pointer transition-colors">
+                <Link to="/privacy-policy">Privacy Policy</Link>
+              </li>
             </ul>
           </div>
 

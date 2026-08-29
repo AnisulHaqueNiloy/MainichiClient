@@ -68,6 +68,7 @@ const TermsPage = () => {
           </div>
         </section>
       </div>
+      {/* added */}
 
       <footer className="mt-16 pt-8 border-t border-gray-200 text-center text-gray-400 text-sm">
         <p>© 2026 Mainichi Halal Shop. All Rights Reserved.</p>

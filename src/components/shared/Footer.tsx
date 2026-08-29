@@ -77,6 +77,9 @@ const Footer = () => {
             </h4>
             <ul className="space-y-4 text-sm text-gray-600 font-medium">
               <li className="hover:text-[#1F5E3B] cursor-pointer transition-colors">
+                <Link to="/support">Support</Link>
+              </li>
+              <li className="hover:text-[#1F5E3B] cursor-pointer transition-colors">
                 <Link to="/shipping-policy">Shipping Guide</Link>
               </li>
               <li className="hover:text-[#1F5E3B] cursor-pointer transition-colors">

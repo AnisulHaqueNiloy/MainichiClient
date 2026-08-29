@@ -26,6 +26,7 @@ import ShippingPolicy from "@/public_pages/ShippingPolicy/ShippingPolicy";
 import ReturnPolicy from "@/public_pages/ReturnPolicy/ReturnPolicy";
 import TermsPage from "@/public_pages/TermsPage";
 import Contact from "@/public_pages/Contact";
+import SupportPage from "@/public_pages/SupportPage";
 import { useEffect } from "react";
 import PrivacyPolicyPage from "../public_pages/PrivacyPolicyPage";
 function ErrorBoundary() {
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
       {
         path: "contact",
         element: <Contact />,
+      },
+      {
+        path: "support",
+        element: <SupportPage />,
       },
     ],
   },

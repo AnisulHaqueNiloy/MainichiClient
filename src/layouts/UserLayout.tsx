@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 
 import Swal from "sweetalert2";
 import { useGetMeQuery, useLogoutMutation } from "@/redux/features/authApi";
-const IMG_URL = import.meta.env.VITE_API_URL
+const IMG_URL = import.meta.env.VITE_API_URL || "";
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -18,11 +18,10 @@ const UserLayout = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-
   // API Logout Mutation Hook
   const [logoutApi, { isLoading: isLoggingOut }] = useLogoutMutation();
-  const {data:user} = useGetMeQuery(undefined)
-// console.log(user.image)
+  const { data: user } = useGetMeQuery(undefined);
+  // console.log(user.image)
   // --- Logout Handler with SweetAlert2 ---
   const handleLogout = async () => {
     const result = await Swal.fire({
@@ -30,11 +29,11 @@ const UserLayout = () => {
       text: "You will be logged out of your account!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#1F5E3B",
+      confirmButtonColor: "#d71920",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, logout!",
       background: "#fff",
-      color: "#1A2E1A",
+      color: "#1f2937",
     });
 
     if (result.isConfirmed) {
@@ -43,7 +42,6 @@ const UserLayout = () => {
         await logoutApi(undefined).unwrap();
 
         // 2. Clear Redux State
-   
 
         // 3. Clear Token
         localStorage.removeItem("token");
@@ -60,9 +58,9 @@ const UserLayout = () => {
         navigate("/", { replace: true });
       } catch (error: any) {
         console.error("Logout Error:", error);
-        
+
         // Force logout on error
-        
+
         localStorage.removeItem("token");
         navigate("/");
 
@@ -79,11 +77,15 @@ const UserLayout = () => {
 
   const menuItems = [
     { icon: <LayoutDashboard size={20} />, label: "Orders", path: `/user` },
-    { icon: <ShoppingBag size={20} />, label: "Profile", path: `/user/profile` },
+    {
+      icon: <ShoppingBag size={20} />,
+      label: "Profile",
+      path: `/user/profile`,
+    },
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAF8] font-sans">
+    <div className="flex min-h-screen bg-slate-50 font-sans">
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
         <div
@@ -95,7 +97,7 @@ const UserLayout = () => {
       {/* Sidebar */}
       <aside
         className={`
-        fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-gray-100 p-6 transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0
+        fixed inset-y-0 left-0 z-50 w-72 border-r border-slate-200 bg-white p-6 transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
       `}
       >
@@ -103,16 +105,16 @@ const UserLayout = () => {
         <div className="mb-10 px-4 flex justify-between items-center">
           <div>
             <Link to={"/"}>
-              <h1 className="text-2xl font-black text-[#1F5E3B] tracking-tighter">
+              <h1 className="text-2xl font-black tracking-tighter text-(--market-leaf)">
                 HALAL JPN
               </h1>
             </Link>
-            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
               User Panel
             </p>
           </div>
           <button
-            className="lg:hidden text-gray-500 hover:bg-gray-50 p-1 rounded-lg"
+            className="rounded-md p-1 text-slate-500 hover:bg-slate-100 lg:hidden"
             onClick={() => setIsSidebarOpen(false)}
           >
             <X size={24} />
@@ -130,8 +132,8 @@ const UserLayout = () => {
                 onClick={() => setIsSidebarOpen(false)}
                 className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl font-bold text-sm transition-all duration-200 ${
                   isActive
-                    ? "bg-[#1F5E3B] text-white shadow-lg shadow-green-100"
-                    : "text-gray-500 hover:bg-[#F1F5F1] hover:text-[#1F5E3B]"
+                    ? "bg-(--market-leaf) text-white shadow-sm shadow-red-100"
+                    : "text-slate-600 hover:bg-red-50 hover:text-(--market-leaf)"
                 }`}
               >
                 {item.icon}
@@ -146,7 +148,7 @@ const UserLayout = () => {
           <button
             onClick={handleLogout}
             disabled={isLoggingOut}
-            className="flex items-center gap-3 px-5 py-3.5 w-full rounded-2xl font-bold text-sm text-red-500 hover:bg-red-50 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group flex w-full items-center gap-3 rounded-md px-4 py-3 text-sm font-bold text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoggingOut ? (
               <Loader2 size={20} className="animate-spin" />
@@ -164,15 +166,15 @@ const UserLayout = () => {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Header */}
-        <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 lg:px-10 sticky top-0 z-30">
+        <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-slate-200 bg-white px-6 lg:px-10">
           <div className="flex items-center gap-4">
             <button
-              className="lg:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-xl transition-colors"
+              className="rounded-md p-2 text-slate-600 transition-colors hover:bg-slate-100 lg:hidden"
               onClick={() => setIsSidebarOpen(true)}
             >
               <Menu size={24} />
             </button>
-            <h2 className="font-black text-[#1A2E1A] text-lg uppercase tracking-tight hidden sm:block">
+            <h2 className="hidden text-lg font-black uppercase tracking-tight text-slate-900 sm:block">
               Welcome Back, {user?.name}
             </h2>
           </div>
@@ -180,13 +182,25 @@ const UserLayout = () => {
           {/* Profile Section */}
           <div className="flex items-center gap-4">
             <div className="text-right hidden md:block">
-              <p className="text-sm font-black text-[#1A2E1A]">User Name</p>
-              <p className="text-[10px] text-[#1F5E3B] font-bold uppercase tracking-wider">
+              <p className="text-sm font-black text-slate-900">{user?.name}</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-(--market-leaf)">
                 {user?.name}
               </p>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-[#F1F5F1] border border-gray-100 flex items-center justify-center text-[#1F5E3B] font-black shadow-sm">
-              <img src={`${IMG_URL}${user?.image}`} alt="" className="rounded-full"/>
+            <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-red-50 font-black text-(--market-leaf)">
+              {user?.image ? (
+                <img
+                  src={
+                    user.image.startsWith("http")
+                      ? user.image
+                      : `${IMG_URL}${user.image}`
+                  }
+                  alt={user.name}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                user?.name?.charAt(0)?.toUpperCase() || "U"
+              )}
             </div>
           </div>
         </header>

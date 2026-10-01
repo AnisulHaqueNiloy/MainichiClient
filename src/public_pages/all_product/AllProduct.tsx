@@ -14,7 +14,6 @@ import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // Redux Hooks
-import { useGetCategoriesQuery } from "@/redux/features/admin/category";
 import { useGetProductsQuery } from "@/redux/features/admin/products";
 
 // 🎯 API Response er structure define korun jate TS error na dey
@@ -29,7 +28,11 @@ interface IProductResponse {
   };
 }
 
-const AllProduct = () => {
+const AllProduct = ({
+  initialResponse,
+}: {
+  initialResponse?: IProductResponse;
+}) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // URL parameters
@@ -42,36 +45,43 @@ const AllProduct = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 15000]);
   const [sortBy, setSortBy] = useState("newest");
 
-  // ১. Categories fetch kora
-  const { data: categoriesData } = useGetCategoriesQuery(undefined);
+  // Products fetch kora (As IProductResponse type casting)
+  const canUseInitialResponse =
+    Boolean(initialResponse) &&
+    Array.isArray(initialResponse?.data) &&
+    !category &&
+    !subCategory &&
+    !keyword &&
+    page === 1 &&
+    priceRange[0] === 0 &&
+    priceRange[1] === 15000 &&
+    sortBy === "newest";
 
-  // ২. Products fetch kora (As IProductResponse type casting)
-  const { data: apiResponse, isLoading: isProductsLoading } =
-    useGetProductsQuery({
-      category,
-      subCategory,
-      keyword,
-      page,
-      minPrice: priceRange[0],
-      maxPrice: priceRange[1],
-      sort:
-        sortBy === "low"
-          ? "priceLow"
-          : sortBy === "high"
-            ? "priceHigh"
-            : "newest",
-      limit: 12,
-    }) as { data: IProductResponse | undefined; isLoading: boolean };
+  const { data: queriedResponse, isLoading: isQueryLoading } =
+    useGetProductsQuery(
+      {
+        category,
+        subCategory,
+        keyword,
+        page,
+        minPrice: priceRange[0],
+        maxPrice: priceRange[1],
+        sort:
+          sortBy === "low"
+            ? "priceLow"
+            : sortBy === "high"
+              ? "priceHigh"
+              : "newest",
+        limit: 12,
+      },
+      { skip: canUseInitialResponse },
+    ) as { data: IProductResponse | undefined; isLoading: boolean };
 
   // 🎯 Error Fix: Optional chaining er sathe default value set kora hoyeche
+  const apiResponse = canUseInitialResponse ? initialResponse : queriedResponse;
   const products = apiResponse?.data || [];
   const meta = apiResponse?.meta || { totalCount: 0, totalPages: 1 };
-
-  const categories =
-    categoriesData?.map((cat: any) => ({
-      id: cat._id,
-      name: cat.name,
-    })) || [];
+  const isProductsLoading = !canUseInitialResponse && isQueryLoading;
 
   const handlePageChange = (newPage: number) => {
     setSearchParams((prev) => {
@@ -81,31 +91,27 @@ const AllProduct = () => {
   };
 
   return (
-    <div className="md:mx-14 mx-4 py-12">
-      <div className="mb-10">
-        <h1 className="text-4xl font-black text-[#1A2E1A]">
-          {subCategory || category ? "Filtered Products" : "All Products"}
-        </h1>
-        <p className="text-gray-500 mt-2">Showing {meta.totalCount} results</p>
+    <div className="w-full px-3 py-6 lg:px-4 lg:py-8">
+      <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-black tracking-tight text-[var(--market-ink)] lg:text-4xl">
+            {subCategory || category ? "Filtered Products" : "All Products"}
+          </h1>
+          <p className="mt-2 text-sm text-gray-500">
+            Showing {meta.totalCount} results
+          </p>
+        </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-12">
-        <aside className="w-full lg:w-72 shrink-0">
+      <main className="flex-1">
+        <div className="mb-5 flex flex-col gap-2 rounded-lg border border-[var(--market-line)] bg-white p-1.5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
           <SidebarFilter
-            categories={categories}
-            selectedCategory={category || subCategory}
-            setSelectedCategory={(id) => {
-              setSearchParams({ category: id, page: "1" });
-            }}
             priceRange={priceRange}
             setPriceRange={setPriceRange}
           />
-        </aside>
-
-        <main className="flex-1">
-          <div className="flex justify-end mb-8">
+          <div className="flex justify-end px-1">
             <Select value={sortBy} onValueChange={(val) => setSortBy(val)}>
-              <SelectTrigger className="w-[200px] bg-white border-none shadow-sm rounded-xl font-bold">
+              <SelectTrigger className="w-[190px] rounded-lg border border-gray-200 bg-white font-semibold shadow-sm">
                 <SelectValue placeholder="Sort by: Newest" />
               </SelectTrigger>
               <SelectContent className="rounded-xl">
@@ -115,74 +121,77 @@ const AllProduct = () => {
               </SelectContent>
             </Select>
           </div>
+        </div>
 
-          {isProductsLoading ? (
-            <div className="flex justify-center py-20">
-              <Loader2 className="animate-spin text-[#1F5E3B]" size={40} />
-            </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {products.length > 0 ? (
-                  products.map((product: any) => (
-                    <ProductCard
-                      key={product._id}
-                      product={{
-                        ...product,
-                        name: product.title,
-                        image: product.images?.[0] || "",
-                      }}
-                    />
-                  ))
-                ) : (
-                  <div className="col-span-full py-20 text-center text-gray-400 font-bold">
-                    No products found in this criteria.
-                  </div>
-                )}
-              </div>
-
-              {meta.totalPages > 1 && (
-                <Pagination className="mt-20">
-                  <PaginationContent className="gap-2">
-                    <Button
-                      variant="ghost"
-                      disabled={page <= 1}
-                      onClick={() => handlePageChange(page - 1)}
-                      className="rounded-xl bg-white shadow-sm"
-                    >
-                      <ChevronLeft className="w-4 h-4 mr-1" /> Previous
-                    </Button>
-
-                    {[...Array(meta.totalPages)].map((_, i) => (
-                      <Button
-                        key={i}
-                        variant={page === i + 1 ? "default" : "ghost"}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`w-10 h-10 rounded-xl font-bold ${
-                          page === i + 1
-                            ? "bg-[#1F5E3B] text-white shadow-md"
-                            : "bg-white"
-                        }`}
-                      >
-                        {i + 1}
-                      </Button>
-                    ))}
-
-                    <Button
-                      variant="ghost"
-                      disabled={page >= meta.totalPages}
-                      onClick={() => handlePageChange(page + 1)}
-                      className="rounded-xl bg-white shadow-sm"
-                    >
-                      Next <ChevronRight className="w-4 h-4 ml-1" />
-                    </Button>
-                  </PaginationContent>
-                </Pagination>
+        {isProductsLoading ? (
+          <div className="flex justify-center py-20">
+            <Loader2
+              className="animate-spin text-[var(--market-leaf)]"
+              size={40}
+            />
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
+              {products.length > 0 ? (
+                products.map((product: any) => (
+                  <ProductCard
+                    key={product._id}
+                    product={{
+                      ...product,
+                      name: product.title,
+                      image: product.images?.[0] || "",
+                    }}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full py-20 text-center text-gray-400 font-bold">
+                  No products found in this criteria.
+                </div>
               )}
-            </>
-          )}
-        </main>
-      </div>
+            </div>
+
+            {meta.totalPages > 1 && (
+              <Pagination className="mt-12">
+                <PaginationContent className="gap-2">
+                  <Button
+                    variant="ghost"
+                    disabled={page <= 1}
+                    onClick={() => handlePageChange(page - 1)}
+                    className="rounded-xl bg-white shadow-sm"
+                  >
+                    <ChevronLeft className="w-4 h-4 mr-1" /> Previous
+                  </Button>
+
+                  {[...Array(meta.totalPages)].map((_, i) => (
+                    <Button
+                      key={i}
+                      variant={page === i + 1 ? "default" : "ghost"}
+                      onClick={() => handlePageChange(i + 1)}
+                      className={`w-10 h-10 rounded-xl font-bold ${
+                        page === i + 1
+                          ? "bg-[var(--market-leaf)] text-white shadow-md"
+                          : "bg-white"
+                      }`}
+                    >
+                      {i + 1}
+                    </Button>
+                  ))}
+
+                  <Button
+                    variant="ghost"
+                    disabled={page >= meta.totalPages}
+                    onClick={() => handlePageChange(page + 1)}
+                    className="rounded-xl bg-white shadow-sm"
+                  >
+                    Next <ChevronRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </PaginationContent>
+              </Pagination>
+            )}
+          </>
+        )}
+      </main>
     </div>
   );
 };

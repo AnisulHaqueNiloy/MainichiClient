@@ -50,17 +50,17 @@ const UserOrderList = () => {
   if (isLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-[#1F5E3B]" />
+        <Loader2 className="h-10 w-10 animate-spin text-(--market-leaf)" />
       </div>
     );
   }
 
   return (
-    <div className="p-4 md:p-8 space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-8 p-4 animate-in fade-in duration-500 md:p-8">
       {/* Header */}
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-black text-[#1A2E1A] tracking-tight uppercase flex items-center gap-2">
-          <ShoppingBag className="text-[#1F5E3B]" /> My Orders
+        <h1 className="flex items-center gap-2 text-2xl font-black uppercase tracking-tight text-slate-900">
+          <ShoppingBag className="text-(--market-leaf)" /> My Orders
         </h1>
         <p className="text-gray-500 text-sm font-medium">
           Track and manage your recent purchases.
@@ -68,15 +68,15 @@ const UserOrderList = () => {
       </div>
 
       {orders.length === 0 ? (
-        <div className="bg-white rounded-[2.5rem] p-20 text-center border border-dashed border-gray-200">
+        <div className="border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
           <Package size={48} className="mx-auto text-gray-200 mb-4" />
-          <h3 className="text-lg font-black text-[#1A2E1A]">No Orders Found</h3>
+          <h3 className="text-lg font-black text-slate-900">No Orders Found</h3>
           <p className="text-gray-400 text-sm mb-6">
             Looks like you haven't placed any orders yet.
           </p>
           <button
             onClick={() => navigate(`/all_products`)}
-            className="px-8 py-3 bg-[#1F5E3B] text-white rounded-full font-black text-xs uppercase tracking-widest hover:opacity-90 transition-all"
+            className="rounded-md bg-(--market-leaf) px-6 py-3 text-xs font-black uppercase tracking-widest text-white transition-colors hover:bg-(--market-leaf-deep)"
           >
             Start Shopping
           </button>
@@ -86,7 +86,7 @@ const UserOrderList = () => {
           {orders?.map((order: any) => (
             <div
               key={order._id}
-              className="bg-white rounded-[2rem] border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+              className="group flex cursor-pointer flex-col justify-between border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
             >
               <div>
                 <div className="flex justify-between items-start mb-6">
@@ -96,7 +96,7 @@ const UserOrderList = () => {
                     {getStatusIcon(order.status)}
                     {order.status}
                   </div>
-                  <span className="text-[10px] font-black text-gray-300 group-hover:text-[#1F5E3B] transition-colors">
+                  <span className="text-[10px] font-black text-slate-400 transition-colors group-hover:text-(--market-leaf)">
                     #{order._id.slice(-6).toUpperCase()}
                   </span>
                 </div>
@@ -124,7 +124,7 @@ const UserOrderList = () => {
                   </div>
 
                   <div className="space-y-1">
-                    <h3 className="font-black text-[#1A2E1A] text-lg leading-tight">
+                    <h3 className="text-lg font-black leading-tight text-slate-900">
                       {order.orderItems?.[0]?.product?.name || "Order Item"}
                       {order.orderItems?.length > 1 &&
                         ` +${order.orderItems.length - 1} more`}
@@ -146,11 +146,11 @@ const UserOrderList = () => {
                   <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
                     Total Amount
                   </p>
-                  <p className="text-xl font-black text-[#1F5E3B]">
+                  <p className="text-xl font-black text-(--market-leaf)">
                     ¥{order.totalPrice.toLocaleString()}
                   </p>
                 </div>
-                <div className="h-10 w-10 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-[#1F5E3B] group-hover:text-white transition-all shadow-sm">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 shadow-sm transition-all group-hover:bg-(--market-leaf) group-hover:text-white">
                   <ChevronRight size={20} />
                 </div>
               </div>

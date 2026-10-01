@@ -71,7 +71,7 @@ const ProfileSetting = () => {
   if (profileLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-[#1F5E3B]" />
+        <Loader2 className="h-10 w-10 animate-spin text-(--market-leaf)" />
       </div>
     );
   }
@@ -80,11 +80,11 @@ const ProfileSetting = () => {
     <div className="notranslate p-4 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Header Section */}
       <div className="flex items-center gap-4 mb-10">
-        <div className="p-4 bg-[#1A2E1A] text-white rounded-3xl shadow-xl shadow-gray-200">
+        <div className="rounded-lg bg-(--market-leaf) p-3 text-white shadow-sm">
           <User size={28} />
         </div>
         <div>
-          <h1 className="text-3xl font-black text-[#1A2E1A] tracking-tight uppercase">
+          <h1 className="text-3xl font-black uppercase tracking-tight text-slate-900">
             Profile Settings
           </h1>
           <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">
@@ -99,9 +99,9 @@ const ProfileSetting = () => {
       >
         {/* Left: Avatar Upload */}
         <div className="lg:col-span-1">
-          <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col items-center">
+          <div className="flex flex-col items-center border border-slate-200 bg-white p-6 shadow-sm">
             <div className="relative group">
-              <div className="h-32 w-32 rounded-[2.5rem] overflow-hidden border-4 border-[#F8FAF8] shadow-inner bg-gray-50">
+              <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-slate-100 bg-slate-50 shadow-inner">
                 {preview ? (
                   <img
                     src={preview}
@@ -114,7 +114,7 @@ const ProfileSetting = () => {
                   </div>
                 )}
               </div>
-              <label className="absolute -bottom-2 -right-2 p-3 bg-[#1F5E3B] text-white rounded-2xl cursor-pointer shadow-lg hover:scale-110 transition-transform">
+              <label className="absolute -bottom-2 -right-2 cursor-pointer rounded-full bg-(--market-leaf) p-3 text-white shadow-md transition-transform hover:scale-110">
                 <Camera size={18} />
                 <input
                   type="file"
@@ -132,7 +132,7 @@ const ProfileSetting = () => {
 
         {/* Right: Form Fields */}
         <div className="lg:col-span-2 space-y-6">
-          <section className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm space-y-5">
+          <section className="space-y-5 border border-slate-200 bg-white p-6 shadow-sm">
             {/* Email - Disabled */}
             <div>
               <label className="text-[10px] font-black text-gray-400 uppercase ml-2 mb-2 block tracking-widest">
@@ -147,7 +147,7 @@ const ProfileSetting = () => {
                   type="email"
                   disabled
                   value={userData?.email}
-                  className="w-full pl-14 pr-6 py-4 bg-[#F8FAF8] border-none rounded-2xl font-bold text-gray-400 cursor-not-allowed"
+                  className="w-full cursor-not-allowed rounded-md border border-slate-200 bg-slate-50 py-3.5 pl-14 pr-6 font-bold text-slate-400"
                 />
               </div>
             </div>
@@ -164,7 +164,7 @@ const ProfileSetting = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                className="w-full px-6 py-4 bg-[#F8FAF8] border-none rounded-2xl focus:ring-2 focus:ring-[#1F5E3B] font-bold text-[#1A2E1A]"
+                className="w-full rounded-md border border-slate-200 bg-slate-50 px-5 py-3.5 font-bold text-slate-900 focus:border-(--market-leaf) focus:outline-none focus:ring-2 focus:ring-red-100"
               />
             </div>
 
@@ -188,7 +188,7 @@ const ProfileSetting = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, password: e.target.value })
                     }
-                    className="w-full pl-14 pr-6 py-4 bg-[#F8FAF8] border-none rounded-2xl focus:ring-2 focus:ring-[#1F5E3B] font-bold"
+                    className="w-full rounded-md border border-slate-200 bg-slate-50 py-3.5 pl-14 pr-6 font-bold focus:border-(--market-leaf) focus:outline-none focus:ring-2 focus:ring-red-100"
                   />
                 </div>
               </div>
@@ -206,7 +206,7 @@ const ProfileSetting = () => {
                       confirmPassword: e.target.value,
                     })
                   }
-                  className="w-full px-6 py-4 bg-[#F8FAF8] border-none rounded-2xl focus:ring-2 focus:ring-[#1F5E3B] font-bold"
+                  className="w-full rounded-md border border-slate-200 bg-slate-50 px-5 py-3.5 font-bold focus:border-(--market-leaf) focus:outline-none focus:ring-2 focus:ring-red-100"
                 />
               </div>
             </div>
@@ -215,7 +215,7 @@ const ProfileSetting = () => {
           <button
             type="submit"
             disabled={isUpdating}
-            className="w-full bg-[#1F5E3B] text-white py-6 rounded-[2rem] font-black text-sm hover:opacity-90 transition-all shadow-xl shadow-green-100 flex items-center justify-center gap-2 uppercase tracking-widest"
+            className="flex w-full items-center justify-center gap-2 rounded-md bg-(--market-leaf) py-4 text-sm font-black uppercase tracking-widest text-white shadow-sm transition-colors hover:bg-(--market-leaf-deep)"
           >
             {isUpdating ? (
               <Loader2 className="animate-spin" size={20} />

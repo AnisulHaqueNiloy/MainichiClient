@@ -5,12 +5,14 @@ import { router } from "./routes/router.tsx";
 import { Provider } from "react-redux";
 import { store } from "./redux/store.ts";
 import { GoogleTranslateWrapper } from "./components/translation/GoogleTranslateWrapper.tsx";
+import AppErrorBoundary from "./components/AppErrorBoundary";
 
 createRoot(document.getElementById("root")!).render(
-  <Provider store={store}>
-    <GoogleTranslateWrapper>
-      {/* <ScrollToTop /> */}
-      <RouterProvider router={router}></RouterProvider>
-    </GoogleTranslateWrapper>
-  </Provider>,
+  <AppErrorBoundary>
+    <Provider store={store}>
+      <GoogleTranslateWrapper>
+        <RouterProvider router={router} />
+      </GoogleTranslateWrapper>
+    </Provider>
+  </AppErrorBoundary>,
 );

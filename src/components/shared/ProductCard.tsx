@@ -1,25 +1,28 @@
 import { ShoppingCart, Heart, Star } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/redux/features/cart/cartSlice";
+
+const IMG_URL = import.meta.env.VITE_API_URL;
 
 const ProductCard = ({ product }: { product: any }) => {
+  const dispatch = useDispatch();
   // Backend image path jodi absolute na hoy, tobe base URL add korte hote pare
   const imageUrl = product.image?.startsWith("http")
     ? product.image
-    : `${import.meta.env.VITE_API_BASE_URL || "https://api.mainichihalalshop.com"}${product.image}`;
-
-  console.log(product.slug);
+    : `${IMG_URL}${product.image}`;
 
   return (
     <Link to={`/product/${product?.slug || product?._id}`}>
-      <div className="group bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-gray-50 transition-all hover:shadow-2xl h-full flex flex-col">
-        <div className="relative aspect-square overflow-hidden bg-gray-50">
+      <div className="group flex h-full flex-col overflow-hidden rounded-lg border border-[var(--market-line)] bg-white shadow-[0_4px_18px_rgba(16,75,50,0.07)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--market-leaf)] hover:shadow-[0_12px_28px_rgba(16,75,50,0.16)]">
+        <div className="relative aspect-square overflow-hidden bg-[var(--market-mint)]">
           {product.stock === "out-of-stock" && (
-            <span className="absolute top-4 left-4 bg-red-500 text-white text-[10px] font-bold px-3 py-1 rounded-full z-10 uppercase">
+            <span className="absolute left-3 top-3 z-10 rounded-full bg-red-500 px-2.5 py-1 text-[9px] font-bold uppercase text-white">
               Out of Stock
             </span>
           )}
-          <button className="absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 shadow-sm z-10 transition-colors">
-            <Heart size={18} />
+          <button className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-gray-400 shadow-sm backdrop-blur-md transition-colors hover:bg-[#FCECF1] hover:text-[#C94F72]">
+            <Heart size={16} />
           </button>
           <img
             src={imageUrl}
@@ -28,17 +31,17 @@ const ProductCard = ({ product }: { product: any }) => {
           />
         </div>
 
-        <div className="p-6 flex flex-col flex-1">
+        <div className="flex flex-1 flex-col p-3.5">
           {/* 🎯 FIXED: Object render na kore string (name) render kora hoyeche */}
-          <p className="text-[#1F5E3B] text-[10px] font-black tracking-widest uppercase mb-1 opacity-70">
+          <p className="mb-1 text-[9px] font-black uppercase tracking-widest text-[var(--market-leaf)]">
             {product.category?.name || "General"}
           </p>
 
-          <h3 className="font-bold text-[#1A2E1A] text-md mb-2 line-clamp-2 h-12">
+          <h3 className="mb-1 line-clamp-2 min-h-10 text-sm font-bold text-[var(--market-ink)]">
             {product.name}
           </h3>
 
-          <div className="flex items-center gap-1 mb-4 text-[#FACC15]">
+          <div className="mb-3 flex items-center gap-1 text-[#F4B942]">
             <Star size={12} fill="currentColor" />
             <span className="text-[10px] font-bold text-gray-800">
               {product.ratings?.average || 0}
@@ -50,7 +53,7 @@ const ProductCard = ({ product }: { product: any }) => {
 
           <div className="flex justify-between items-center mt-auto">
             <div>
-              <p className="text-xl font-black text-[#1A2E1A]">
+              <p className="text-lg font-black text-[var(--market-tomato)]">
                 ¥{product.price}
               </p>
               {product.discountPrice && (
@@ -59,8 +62,27 @@ const ProductCard = ({ product }: { product: any }) => {
                 </p>
               )}
             </div>
-            <button className="bg-[#1F5E3B] text-white p-3 rounded-2xl hover:bg-[#16432a] transition-all shadow-lg">
-              <ShoppingCart size={20} />
+            <button
+              type="button"
+              aria-label={`Add ${product.name} to cart`}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                dispatch(
+                  addToCart({
+                    id: product._id,
+                    name: product.name,
+                    price: product.price,
+                    qty: 1,
+                    img: imageUrl,
+                    desc: product.desc,
+                    slug: product.slug,
+                  }),
+                );
+              }}
+              className="rounded-lg bg-[var(--market-tomato)] p-2.5 text-white shadow-md transition-all hover:bg-[var(--market-tomato-deep)]"
+            >
+              <ShoppingCart size={18} />
             </button>
           </div>
         </div>

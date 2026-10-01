@@ -14,25 +14,39 @@ export function PaginationComponent() {
       <PaginationContent className="gap-2">
         {/* Previous Button */}
         <PaginationItem>
-          <PaginationPrevious 
-            href="#" 
-            className="rounded-xl border-gray-100 bg-white hover:bg-[#F1F5F1] transition-colors"
+          <PaginationPrevious
+            href="#"
+            className="rounded-lg border-slate-200 bg-white hover:bg-slate-50 transition-colors"
           />
         </PaginationItem>
 
         {/* Page Numbers */}
         <PaginationItem>
-          <PaginationLink href="#" className="rounded-xl border-none font-bold text-gray-400">1</PaginationLink>
+          <PaginationLink
+            href="#"
+            className="rounded-xl border-none font-bold text-gray-400"
+          >
+            1
+          </PaginationLink>
         </PaginationItem>
-        
+
         <PaginationItem>
-          <PaginationLink href="#" isActive className="rounded-xl bg-[#1F5E3B] text-white hover:bg-[#16432a] font-bold shadow-lg">
+          <PaginationLink
+            href="#"
+            isActive
+            className="rounded-lg bg-[var(--market-leaf)] text-white hover:bg-[var(--market-tomato-deep)] font-bold shadow-sm"
+          >
             2
           </PaginationLink>
         </PaginationItem>
 
         <PaginationItem>
-          <PaginationLink href="#" className="rounded-xl border-none font-bold text-gray-400">3</PaginationLink>
+          <PaginationLink
+            href="#"
+            className="rounded-xl border-none font-bold text-gray-400"
+          >
+            3
+          </PaginationLink>
         </PaginationItem>
 
         <PaginationItem>
@@ -40,14 +54,19 @@ export function PaginationComponent() {
         </PaginationItem>
 
         <PaginationItem>
-          <PaginationLink href="#" className="rounded-xl border-none font-bold text-gray-400">12</PaginationLink>
+          <PaginationLink
+            href="#"
+            className="rounded-xl border-none font-bold text-gray-400"
+          >
+            12
+          </PaginationLink>
         </PaginationItem>
 
         {/* Next Button */}
         <PaginationItem>
-          <PaginationNext 
-            href="#" 
-            className="rounded-xl border-gray-100 bg-white hover:bg-[#F1F5F1] transition-colors"
+          <PaginationNext
+            href="#"
+            className="rounded-lg border-slate-200 bg-white hover:bg-slate-50 transition-colors"
           />
         </PaginationItem>
       </PaginationContent>

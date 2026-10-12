@@ -27,6 +27,7 @@ import {
 } from "@/redux/features/admin/products";
 import { useGetMeQuery } from "@/redux/features/authApi";
 import { getImageUrl } from "@/lib/utils";
+import SEO from "@/components/shared/SEO";
 
 const ProductDetails = ({ initialProduct }: { initialProduct?: any }) => {
   const { slug } = useParams();
@@ -128,8 +129,55 @@ const ProductDetails = ({ initialProduct }: { initialProduct?: any }) => {
     }
   };
 
+  const productSchema = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    name: product?.title,
+    image: images.length > 0 ? images : undefined,
+    description:
+      product?.desc ||
+      `Buy ${product?.title} online at Mainichi Halal Food Shop in Japan. 100% Certified Halal.`,
+    category: product?.category?.title,
+    offers: {
+      "@type": "Offer",
+      url: `https://mainichihalalshop.com/product/${slug || product?._id}`,
+      priceCurrency: "JPY",
+      price: product?.price,
+      itemCondition: "https://schema.org/NewCondition",
+      availability:
+        product?.stock === "out-of-stock"
+          ? "https://schema.org/OutOfStock"
+          : "https://schema.org/InStock",
+      seller: {
+        "@type": "Organization",
+        name: "Mainichi Halal Food Shop",
+      },
+    },
+    ...(product?.ratings?.count && product?.ratings?.count > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: product.ratings.average || 5,
+            reviewCount: product.ratings.count,
+          },
+        }
+      : {}),
+  };
+
   return (
     <div className="w-full px-3 py-6 font-sans lg:px-4 lg:py-8">
+      <SEO
+        title={`${product?.title} (¥${product?.price?.toLocaleString()})`}
+        description={
+          product?.desc
+            ? `${product.desc.slice(0, 155)}... Buy halal ${product.title} in Japan.`
+            : `Buy 100% certified halal ${product?.title} for ¥${product?.price} in Japan. Cash on Delivery available.`
+        }
+        image={images[0]}
+        url={`/product/${slug || product?._id}`}
+        type="product"
+        schema={productSchema}
+      />
       <AnimatePresence>
         {isLightboxOpen && (
           <motion.div

@@ -1,8 +1,14 @@
 import { RefreshCw, ShieldCheck, HelpCircle } from "lucide-react";
+import SEO from "@/components/shared/SEO";
 
 const ReturnPolicy = () => {
   return (
     <div className="max-w-4xl mx-auto py-16 px-6 font-sans text-[#1A2E1A]">
+      <SEO
+        title="Return & Refund Policy"
+        description="Our straightforward return and refund policy for Halal groceries in Japan. Quality and freshness guaranteed."
+        url="/return-policy"
+      />
       <header className="mb-12">
         <h1 className="text-4xl font-black uppercase mb-4">
           Return & Refund Policy

@@ -13,8 +13,8 @@ import ProductCard from "@/components/shared/ProductCard";
 import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Redux Hooks
 import { useGetProductsQuery } from "@/redux/features/admin/products";
+import SEO from "@/components/shared/SEO";
 
 // 🎯 API Response er structure define korun jate TS error na dey
 interface IProductResponse {
@@ -90,12 +90,45 @@ const AllProduct = ({
     });
   };
 
+  const pageTitle = keyword
+    ? `Search: "${keyword}" - Halal Groceries`
+    : subCategory || category
+      ? "Category Products - 100% Halal Food"
+      : "All Halal Products & Groceries in Japan";
+
   return (
     <div className="w-full px-3 py-6 lg:px-4 lg:py-8">
+      <SEO
+        title={pageTitle}
+        description={`Explore all ${meta.totalCount || ""} certified halal groceries, spices, meats, and snacks available in Japan with fast cash-on-delivery shipping.`}
+        url={`/all_products${keyword ? `?keyword=${encodeURIComponent(keyword)}` : ""}`}
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: "https://www.mainichihalalfoodshop.com/",
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "All Products",
+              item: "https://www.mainichihalalfoodshop.com/all_products",
+            },
+          ],
+        }}
+      />
       <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-3xl font-black tracking-tight text-[var(--market-ink)] lg:text-4xl">
-            {subCategory || category ? "Filtered Products" : "All Products"}
+            {keyword
+              ? `Results for "${keyword}"`
+              : subCategory || category
+                ? "Filtered Products"
+                : "All Products"}
           </h1>
           <p className="mt-2 text-sm text-gray-500">
             Showing {meta.totalCount} results

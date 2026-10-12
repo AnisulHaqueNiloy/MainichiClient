@@ -1,8 +1,14 @@
 import { Truck, Clock, Phone, CreditCard, MapPin } from "lucide-react";
+import SEO from "@/components/shared/SEO";
 
 const ShippingPolicy = () => {
   return (
     <div className="max-w-4xl mx-auto py-16 px-6 font-sans">
+      <SEO
+        title="Shipping & Delivery Policy in Japan"
+        description="Learn about our nationwide Halal grocery delivery across Japan via Sagawa and Yamato Takkyubin. Next-day delivery available for early orders."
+        url="/shipping-policy"
+      />
       <header className="mb-12">
         <h1 className="text-4xl font-black text-[#1A2E1A] uppercase mb-4">
           Shipping & Delivery Policy

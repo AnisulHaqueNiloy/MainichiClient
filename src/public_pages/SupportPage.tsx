@@ -14,6 +14,7 @@ import {
   Clock,
   HelpCircle,
 } from "lucide-react";
+import SEO from "@/components/shared/SEO";
 
 const faqs = [
   {
@@ -78,8 +79,27 @@ const helpTopics = [
 const SupportPage = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+
   return (
     <div className="py-16 px-6 bg-white text-[#1A2E1A] font-sans">
+      <SEO
+        title="Customer Support & FAQ"
+        description="Find answers to frequently asked questions about Halal food delivery, payment via Cash on Delivery, shipping costs, and returns in Japan."
+        url="/support"
+        schema={faqSchema}
+      />
       <div className="max-w-5xl mx-auto">
         <header className="text-center mb-14">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#F1F5F1] text-[#1F5E3B] mb-6">

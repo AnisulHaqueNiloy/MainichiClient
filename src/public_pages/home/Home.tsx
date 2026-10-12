@@ -6,6 +6,7 @@ import FeaturedProducts from "./components/FeaturedProducts";
 import { useGetCategoriesQuery } from "@/redux/features/admin/category";
 import { useGetProductsQuery } from "@/redux/features/admin/products";
 import { useGetBannersQuery } from "@/redux/features/admin/bannerApi";
+import SEO from "@/components/shared/SEO";
 
 export interface HomeData {
   categories: any[];
@@ -56,6 +57,12 @@ export default function Home({
 
   return (
     <div>
+      <SEO
+        title="100% Certified Halal Groceries in Japan"
+        description="Shop fresh halal meat, chicken, beef, basmati rice, spices, and everyday pantry essentials online in Japan with fast nationwide delivery and Cash on Delivery (COD)."
+        keywords="halal food japan, halal food online tokyo, halal grocery japan, mainichi halal, buy halal meat japan, halal food delivery japan"
+        url="/"
+      />
       <HeroSection
         initialCategories={categories}
         initialBanners={banners}

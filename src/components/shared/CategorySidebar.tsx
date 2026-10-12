@@ -2,8 +2,7 @@ import { ChevronDown, ChevronRight, Loader2, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useGetCategoriesQuery } from "@/redux/features/admin/category";
 import { useState } from "react";
-
-const IMG_URL = import.meta.env.VITE_API_URL;
+import { getImageUrl } from "@/lib/utils";
 
 const CategorySidebar = ({
   initialCategories,
@@ -17,8 +16,7 @@ const CategorySidebar = ({
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
   const getFullImageUrl = (path?: string) => {
-    if (!path) return null;
-    return path?.startsWith("http") ? path : `${IMG_URL}${path}`;
+    return getImageUrl(path);
   };
 
   return (

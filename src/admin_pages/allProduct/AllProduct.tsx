@@ -8,6 +8,7 @@ import { Edit, Trash2, Plus, Package } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { getImageUrl } from "@/lib/utils";
 
 const ProductList = () => {
   // ✅ PAGINATION STATE
@@ -149,7 +150,7 @@ const ProductList = () => {
                       <div className="avatar">
                         <div className="mask mask-squircle w-14 h-14 bg-gray-50">
                           <img
-                            src={`${import.meta.env.VITE_API_URL}${product.images?.[0]}`}
+                            src={getImageUrl(product.images?.[0])}
                             alt={product.title}
                             className="object-cover"
                             onError={(e) =>

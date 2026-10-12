@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 
 import Swal from "sweetalert2";
 import { useGetMeQuery, useLogoutMutation } from "@/redux/features/authApi";
-const IMG_URL = import.meta.env.VITE_API_URL || "";
+import { getImageUrl } from "@/lib/utils";
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -190,11 +190,7 @@ const UserLayout = () => {
             <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-red-50 font-black text-(--market-leaf)">
               {user?.image ? (
                 <img
-                  src={
-                    user.image.startsWith("http")
-                      ? user.image
-                      : `${IMG_URL}${user.image}`
-                  }
+                  src={getImageUrl(user.image)}
                   alt={user.name}
                   className="h-full w-full object-cover"
                 />

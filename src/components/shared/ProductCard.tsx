@@ -2,15 +2,12 @@ import { ShoppingCart, Heart, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/redux/features/cart/cartSlice";
-
-const IMG_URL = import.meta.env.VITE_API_URL;
+import { getImageUrl } from "@/lib/utils";
 
 const ProductCard = ({ product }: { product: any }) => {
   const dispatch = useDispatch();
-  // Backend image path jodi absolute na hoy, tobe base URL add korte hote pare
-  const imageUrl = product.image?.startsWith("http")
-    ? product.image
-    : `${IMG_URL}${product.image}`;
+  const rawImage = product.image || product.images?.[0] || "";
+  const imageUrl = getImageUrl(rawImage);
 
   return (
     <Link to={`/product/${product?.slug || product?._id}`}>
@@ -25,8 +22,11 @@ const ProductCard = ({ product }: { product: any }) => {
             <Heart size={16} />
           </button>
           <img
-            src={imageUrl}
+            src={imageUrl || "/placeholder.png"}
             alt={product.name}
+            onError={(e) => {
+              e.currentTarget.src = "/placeholder.png";
+            }}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
         </div>

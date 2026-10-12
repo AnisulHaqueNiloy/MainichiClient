@@ -30,7 +30,7 @@ import {
 import Swal from "sweetalert2";
 import { useDeleteOrderMutation, useGetAllOrdersQuery, useUpdateOrderStatusMutation } from "@/redux/features/admin/adminOrderApi";
 import { Link } from "react-router-dom";
-// const IMG_URL = import.meta.env.VITE_API_URL
+import { getImageUrl } from "@/lib/utils";
 const AllOrders = () => {
   const {
     data: ordersData,
@@ -218,7 +218,10 @@ const AllOrders = () => {
                           title={item.name}
                         >
                           <img
-                            src={item.image}
+                            src={getImageUrl(item.image)}
+                            onError={(e) => {
+                              e.currentTarget.src = "/placeholder.png";
+                            }}
                             alt=""
                             className="h-full w-full object-cover"
                           />

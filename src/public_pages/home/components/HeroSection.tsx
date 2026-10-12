@@ -5,8 +5,8 @@ import { Link, NavLink } from "react-router-dom";
 import { useGetCategoriesQuery } from "@/redux/features/admin/category";
 import { useGetOfferQuery } from "@/redux/features/admin/offer";
 import { useGetBannersQuery } from "@/redux/features/admin/bannerApi";
+import { getImageUrl } from "@/lib/utils";
 
-const IMG_URL = import.meta.env.VITE_API_URL;
 const FALLBACK_HERO_IMAGE =
   "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=2000&q=85";
 
@@ -40,8 +40,7 @@ const HeroSection = ({
   const offerData = initialOffer || queriedOffer;
 
   const getFullImageUrl = (path?: string) => {
-    if (!path) return "";
-    return path.startsWith("http") ? path : `${IMG_URL}${path}`;
+    return getImageUrl(path);
   };
 
   const goToSlide = (slide: number) => {

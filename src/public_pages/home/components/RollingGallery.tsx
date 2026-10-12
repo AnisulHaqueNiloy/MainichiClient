@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Link } from "react-router-dom";
 
-const IMG_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import { getImageUrl } from "@/lib/utils";
 
 // API theke asha product er type (Apnar provided interface onujayi)
 interface IProduct {
@@ -24,8 +24,7 @@ const RenderRow = ({
   const repeatedData = Array(10).fill(rowData).flat();
 
   const getFullImageUrl = (path: string) => {
-    if (!path) return "";
-    return path.startsWith("http") ? path : `${IMG_URL}${path}`;
+    return getImageUrl(path);
   };
 
   return (

@@ -1,11 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const API_ROOT = (
+  import.meta.env.VITE_API_URL || "https://api.mainichihalalshop.com"
+).replace(/\/+$/, "");
+
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://api.mainichihalalshop.com/api",
-    // baseUrl: "http://localhost:5000/api",
-
+    baseUrl: `${API_ROOT}/api`,
     credentials: "include",
   }),
 

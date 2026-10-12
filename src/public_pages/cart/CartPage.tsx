@@ -24,6 +24,7 @@ import { useGetMeQuery } from "@/redux/features/authApi";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { usePlaceOrderMutation } from "@/redux/features/orderApi";
+import { getImageUrl } from "@/lib/utils";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -75,7 +76,7 @@ const CartPage = () => {
       orderItems: cartItems.map((item) => ({
         name: item.name,
         qty: item.qty,
-        image: item.img,
+        image: getImageUrl(item.img),
         price: item.price,
         product: item.id,
       })),
@@ -128,7 +129,10 @@ const CartPage = () => {
                     className="flex flex-wrap md:flex-nowrap items-center gap-6 py-4"
                   >
                     <img
-                      src={item.img}
+                      src={getImageUrl(item.img)}
+                      onError={(e) => {
+                        e.currentTarget.src = "/placeholder.png";
+                      }}
                       className="w-20 h-20 rounded-2xl object-cover bg-gray-50 border"
                       alt={item.name}
                     />

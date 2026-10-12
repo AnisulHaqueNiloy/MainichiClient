@@ -7,8 +7,7 @@ import {
 import Swal from "sweetalert2";
 import { Loader2, Plus, X, Trash2, Film } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const IMG_URL = import.meta.env.VITE_API_URL;
+import { getImageUrl } from "@/lib/utils";
 
 const AddBanner = () => {
   const [title, setTitle] = useState("");
@@ -231,13 +230,13 @@ const AddBanner = () => {
                 <div className="h-48 relative overflow-hidden">
                   {item.image.match(/\.(mp4|webm|mov)$/i) ? (
                     <video
-                      src={`${IMG_URL}${item.image}`}
+                      src={getImageUrl(item.image)}
                       className="w-full h-full object-cover"
                       muted
                     />
                   ) : (
                     <img
-                      src={`${IMG_URL}${item.image}`}
+                      src={getImageUrl(item.image)}
                       alt=""
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />

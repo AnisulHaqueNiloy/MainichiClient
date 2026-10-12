@@ -11,6 +11,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getImageUrl } from "@/lib/utils";
 
 const UserOrderList = () => {
   const navigate = useNavigate();
@@ -110,7 +111,10 @@ const UserOrderList = () => {
                         className="h-12 w-12 rounded-xl border-2 border-white bg-gray-50 overflow-hidden shadow-sm"
                       >
                         <img
-                          src={item.product?.image || item.image}
+                          src={getImageUrl(item.product?.image || item.image)}
+                          onError={(e) => {
+                            e.currentTarget.src = "/placeholder.png";
+                          }}
                           alt=""
                           className="h-full w-full object-cover"
                         />

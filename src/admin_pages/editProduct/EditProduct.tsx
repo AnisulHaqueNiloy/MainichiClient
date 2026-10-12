@@ -15,6 +15,7 @@ import {
   useGetProductDetailsQuery,
   useUpdateProductMutation,
 } from "@/redux/features/admin/products";
+import { getImageUrl } from "@/lib/utils";
 
 const EditProduct = () => {
   const { id } = useParams();
@@ -296,7 +297,7 @@ const EditProduct = () => {
                   className="relative aspect-square rounded-2xl overflow-hidden border border-gray-100 group"
                 >
                   <img
-                    src={`${import.meta.env.VITE_API_URL}${src}`}
+                    src={getImageUrl(src)}
                     className="w-full h-full object-cover"
                     alt="Server"
                   />

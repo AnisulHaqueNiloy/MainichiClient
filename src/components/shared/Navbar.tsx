@@ -27,8 +27,7 @@ import { useGetMeQuery, useLogoutMutation } from "@/redux/features/authApi";
 import { useSelector } from "react-redux";
 
 import LanguageDropdown from "../translation/LanguageDropdown";
-
-const IMG_URL = import.meta.env.VITE_API_URL;
+import { getImageUrl } from "@/lib/utils";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -81,8 +80,7 @@ const Navbar = () => {
   };
 
   const getFullImageUrl = (path: string) => {
-    if (!path) return null;
-    return path.startsWith("http") ? path : `${IMG_URL}${path}`;
+    return getImageUrl(path);
   };
 
   useEffect(() => {

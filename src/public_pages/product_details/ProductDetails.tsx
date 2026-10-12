@@ -29,7 +29,7 @@ import { useGetMeQuery } from "@/redux/features/authApi";
 
 const IMG_URL = import.meta.env.VITE_API_URL;
 
-const ProductDetails = () => {
+const ProductDetails = ({ initialProduct }: { initialProduct?: any }) => {
   const { slug } = useParams();
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
@@ -43,14 +43,17 @@ const ProductDetails = () => {
 
   const { data: user } = useGetMeQuery(undefined);
   const {
-    data: product,
+    data: queriedProduct,
     isLoading,
     isError,
     refetch,
-  } = useGetProductBySlugQuery(slug as string);
+  } = useGetProductBySlugQuery(slug as string, {
+    skip: Boolean(initialProduct),
+  });
   const [createReview, { isLoading: isReviewSubmitting }] =
     useCreateReviewMutation();
 
+  const product = initialProduct || queriedProduct;
   const isAdmin = user?.role === "ADMIN";
   const isLoggedIn = !!user;
 
@@ -66,7 +69,7 @@ const ProductDetails = () => {
   if (isLoading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader2 className="animate-spin text-[#1F5E3B]" size={40} />
+        <Loader2 className="animate-spin text-[var(--market-leaf)]" size={40} />
       </div>
     );
   }
@@ -119,14 +122,15 @@ const ProductDetails = () => {
       Swal.fire("Success", "Review added successfully!", "success");
       setComment("");
       setRating(5);
-      refetch();
+      if (initialProduct) window.location.reload();
+      else refetch();
     } catch (err: any) {
       Swal.fire("Error", err?.data?.message || "Failed to add review", "error");
     }
   };
 
   return (
-    <div className="md:mx-14 mx-4 py-10 font-sans">
+    <div className="w-full px-3 py-6 font-sans lg:px-4 lg:py-8">
       <AnimatePresence>
         {isLightboxOpen && (
           <motion.div
@@ -149,15 +153,15 @@ const ProductDetails = () => {
         )}
       </AnimatePresence>
 
-      <nav className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-8">
+      <nav className="mb-6 text-[10px] font-bold uppercase tracking-widest text-gray-400">
         Home &nbsp;›&nbsp; {product?.category?.title || "Category"}{" "}
         &nbsp;›&nbsp; <span className="text-[#1A2E1A]">{product?.title}</span>
       </nav>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+      <div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)] lg:gap-10">
         <div className="space-y-4">
           <div
-            className="aspect-square rounded-[2.5rem] overflow-hidden bg-gray-50 border border-gray-100 cursor-zoom-in"
+            className="aspect-square max-h-[680px] cursor-zoom-in overflow-hidden rounded-xl border border-[var(--market-line)] bg-[var(--market-mint)] shadow-[0_8px_28px_rgba(16,75,50,0.1)]"
             onClick={() => setIsLightboxOpen(true)}
           >
             <motion.img
@@ -169,14 +173,14 @@ const ProductDetails = () => {
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
             />
           </div>
-          <div className="grid grid-cols-4 gap-4">
-            {images.map((img, i) => (
+          <div className="grid grid-cols-4 gap-2">
+            {images.map((img: string, i: number) => (
               <div
                 key={i}
                 onClick={() => setSelectedImage(i)}
                 className={`aspect-square rounded-2xl overflow-hidden border-2 cursor-pointer transition-all ${
                   i === selectedImage
-                    ? "border-[#1F5E3B] scale-95"
+                    ? "border-[var(--market-leaf)] scale-95"
                     : "border-transparent opacity-60"
                 }`}
               >
@@ -194,13 +198,13 @@ const ProductDetails = () => {
           <div className="flex gap-2 mb-4">
             <Badge
               variant="outline"
-              className="text-[10px] font-bold text-[#1F5E3B] border-[#1F5E3B] uppercase px-3"
+              className="border-[var(--market-leaf)] bg-[var(--market-mint)] px-3 text-[10px] font-bold uppercase text-[var(--market-leaf)]"
             >
               <CheckCircle2 size={12} className="mr-1" /> Certified Halal
             </Badge>
           </div>
 
-          <h1 className="text-4xl font-black text-[#1A2E1A] leading-tight mb-2 uppercase">
+          <h1 className="mb-2 text-3xl font-black uppercase leading-tight text-[var(--market-ink)] lg:text-4xl">
             {product?.title}
           </h1>
 
@@ -225,7 +229,7 @@ const ProductDetails = () => {
           </div>
 
           <div className="flex items-baseline gap-3 mb-4">
-            <span className="text-4xl font-black text-[#1F5E3B]">
+            <span className="text-4xl font-black text-[var(--market-tomato)]">
               ¥{product?.price?.toLocaleString()}
             </span>
           </div>
@@ -243,14 +247,14 @@ const ProductDetails = () => {
             <div className="flex items-center justify-between bg-white border border-gray-100 rounded-2xl px-6 py-2 gap-6 min-w-[140px]">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="hover:text-[#1F5E3B]"
+                className="hover:text-[var(--market-leaf)]"
               >
                 <Minus size={18} />
               </button>
               <span className="font-black text-xl">{quantity}</span>
               <button
                 onClick={() => setQuantity(quantity + 1)}
-                className="hover:text-[#1F5E3B]"
+                className="hover:text-[var(--market-leaf)]"
               >
                 <Plus size={18} />
               </button>
@@ -258,10 +262,10 @@ const ProductDetails = () => {
             <Button
               onClick={handleAddToCart}
               disabled={isAdmin}
-              className={`flex-1 rounded-2xl h-16 font-black text-lg gap-3 shadow-xl transition-all ${
+              className={`h-14 flex-1 gap-3 rounded-xl text-base font-black shadow-xl transition-all ${
                 isAdmin
                   ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  : "bg-[#1F5E3B] hover:bg-[#16432a] text-white active:scale-95"
+                  : "bg-[var(--market-tomato)] hover:bg-[var(--market-tomato-deep)] text-white active:scale-95"
               }`}
             >
               <ShoppingCart size={22} />{" "}
@@ -272,14 +276,17 @@ const ProductDetails = () => {
       </div>
 
       {/* --- IMPROVED REVIEW SECTION --- */}
-      <section className="mt-20 border-t border-gray-100 pt-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+      <section className="mt-12 border-t border-gray-100 pt-10">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
           {/* Summary & Form (Left 5 Columns) */}
           <div className="lg:col-span-5 space-y-10">
             <div>
               <h2 className="text-3xl font-black text-[#1A2E1A] mb-4 flex items-center gap-3">
                 Ratings & Reviews{" "}
-                <MessageSquare className="text-[#1F5E3B]" size={24} />
+                <MessageSquare
+                  className="text-[var(--market-leaf)]"
+                  size={24}
+                />
               </h2>
 
               {/* Rating Breakdown Card */}
@@ -319,7 +326,7 @@ const ProductDetails = () => {
                               width: `${getStarPercentage(star)}%`,
                             }}
                             transition={{ duration: 1, ease: "easeOut" }}
-                            className="h-full bg-[#1F5E3B]"
+                            className="h-full bg-[var(--market-leaf)]"
                           />
                         </div>
                         <span className="text-[10px] font-bold text-gray-400 w-6">
@@ -368,7 +375,7 @@ const ProductDetails = () => {
                     <div className="relative">
                       <Textarea
                         placeholder="Share your experience with this product..."
-                        className="rounded-2xl border-none bg-white min-h-[120px] p-4 text-sm shadow-inner focus-visible:ring-1 focus-visible:ring-[#1F5E3B]"
+                        className="rounded-lg border border-slate-200 bg-white min-h-[120px] p-4 text-sm shadow-inner focus-visible:ring-1 focus-visible:ring-[var(--market-leaf)]"
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                       />
@@ -376,7 +383,7 @@ const ProductDetails = () => {
                     <Button
                       type="submit"
                       disabled={isReviewSubmitting}
-                      className="w-full bg-[#1A2E1A] hover:bg-black text-white rounded-xl h-14 font-bold gap-3 transition-all"
+                      className="w-full bg-[var(--market-leaf)] hover:bg-[var(--market-tomato-deep)] text-white rounded-lg h-14 font-bold gap-3 transition-all"
                     >
                       {isReviewSubmitting ? (
                         <Loader2 className="animate-spin" size={20} />
@@ -388,8 +395,8 @@ const ProductDetails = () => {
                     </Button>
                   </form>
                 ) : (
-                  <div className="bg-[#1F5E3B]/5 p-4 rounded-2xl text-center border border-[#1F5E3B]/10">
-                    <p className="text-xs font-bold text-[#1F5E3B]">
+                  <div className="bg-blue-50 p-4 rounded-lg text-center border border-blue-100">
+                    <p className="text-xs font-bold text-[var(--market-leaf)]">
                       {isAdmin
                         ? "Admins are not permitted to review."
                         : "Login to share your thoughts."}
@@ -423,7 +430,7 @@ const ProductDetails = () => {
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-[#1F5E3B]/10 flex items-center justify-center text-[#1F5E3B] font-black uppercase text-sm">
+                        <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[var(--market-leaf)] font-black uppercase text-sm">
                           {rev.name?.charAt(0) || "U"}
                         </div>
                         <div>
@@ -460,7 +467,7 @@ const ProductDetails = () => {
                       "{rev.comment}"
                     </p>
                     <div className="mt-4 flex items-center gap-4 border-t border-gray-50 pt-4">
-                      <button className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 hover:text-[#1F5E3B] transition-colors">
+                      <button className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 hover:text-[var(--market-leaf)] transition-colors">
                         <ThumbsUp size={12} /> Helpful
                       </button>
                     </div>

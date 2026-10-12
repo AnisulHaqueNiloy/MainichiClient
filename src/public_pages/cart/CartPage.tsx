@@ -91,7 +91,7 @@ const CartPage = () => {
         icon: "success",
         title: "Order Placed!",
         text: "Thank you for shopping with Japan Halal Food.",
-        confirmButtonColor: "#1F5E3B",
+        confirmButtonColor: "#d71920",
       });
       dispatch(clearCart());
       navigate("/all_products");
@@ -101,8 +101,8 @@ const CartPage = () => {
   };
 
   return (
-    <div className="notranslate md:mx-14 mx-4 py-12 bg-white min-h-[80vh] font-sans">
-      <header className="mb-10 text-center md:text-left">
+    <div className="notranslate w-full px-3 py-6 lg:px-4 lg:py-8 bg-white min-h-[80vh] font-sans">
+      <header className="mb-7 text-center md:text-left">
         <h1 className="text-4xl font-black text-[#1A2E1A] mb-2 uppercase tracking-tight">
           Checkout Bag
         </h1>
@@ -112,12 +112,12 @@ const CartPage = () => {
       </header>
 
       {cartItems.length > 0 ? (
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-12">
+        <div className="grid grid-cols-1 gap-8 xl:grid-cols-12">
           {/* Left: Cart Items & Shipping Form */}
-          <div className="xl:col-span-8 space-y-12">
+          <div className="space-y-8 xl:col-span-8">
             {/* 1. Items List */}
             <div className="space-y-4">
-              <h3 className="text-sm font-black uppercase text-[#1A2E1A] border-l-4 border-[#1F5E3B] pl-3 mb-6">
+              <h3 className="text-sm font-black uppercase text-slate-800 border-l-4 border-[var(--market-leaf)] pl-3 mb-6">
                 1. Review Your Items
               </h3>
               <div className="divide-y divide-gray-100">
@@ -144,7 +144,7 @@ const CartPage = () => {
                                 updateQuantity({ id: item.id, delta: -1 }),
                               )
                             }
-                            className="p-1 hover:text-[#1F5E3B]"
+                            className="p-1 hover:text-[var(--market-leaf)]"
                           >
                             <Minus size={12} />
                           </button>
@@ -157,7 +157,7 @@ const CartPage = () => {
                                 updateQuantity({ id: item.id, delta: 1 }),
                               )
                             }
-                            className="p-1 hover:text-[#1F5E3B]"
+                            className="p-1 hover:text-[var(--market-leaf)]"
                           >
                             <Plus size={12} />
                           </button>
@@ -174,7 +174,7 @@ const CartPage = () => {
                       <p className="text-sm text-gray-400 font-bold uppercase">
                         Total
                       </p>
-                      <p className="font-black text-xl text-[#1A2E1A]">
+                      <p className="font-black text-xl text-slate-900">
                         ¥{(item.price * item.qty).toLocaleString()}
                       </p>
                     </div>
@@ -185,10 +185,10 @@ const CartPage = () => {
 
             {/* 2. Shipping Address Form */}
             <div className="space-y-6">
-              <h3 className="text-sm font-black uppercase text-[#1A2E1A] border-l-4 border-[#1F5E3B] pl-3">
+              <h3 className="text-sm font-black uppercase text-slate-800 border-l-4 border-[var(--market-leaf)] pl-3">
                 2. Shipping Address
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-8 rounded-[2.5rem] border border-gray-100">
+              <div className="grid grid-cols-1 gap-4 rounded-xl border border-slate-200 bg-slate-50 p-5 md:grid-cols-2">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-gray-400 ml-1">
                     Full Address
@@ -265,28 +265,30 @@ const CartPage = () => {
 
           {/* Right: Order Summary Sticky Card */}
           <div className="xl:col-span-4">
-            <div className="bg-[#1A2E1A] text-white rounded-[2.5rem] p-8 sticky top-10 shadow-2xl shadow-green-900/20">
-              <h2 className="text-xl font-black mb-8 uppercase tracking-widest flex justify-between items-center">
+            <div className="sticky top-10 rounded-xl border border-slate-200 bg-white p-6 text-slate-800 shadow-lg shadow-slate-900/5">
+              <h2 className="mb-6 flex items-center justify-between text-xl font-black uppercase tracking-widest">
                 Summary{" "}
-                <span className="text-[10px] bg-[#1F5E3B] px-3 py-1 rounded-full italic">
+                <span className="rounded-sm bg-red-50 px-3 py-1 text-[10px] font-bold text-[var(--market-leaf)]">
                   COD
                 </span>
               </h2>
 
               <div className="space-y-4 mb-8">
-                <div className="flex justify-between text-gray-400 text-xs font-bold uppercase tracking-widest">
+                <div className="flex justify-between text-slate-500 text-xs font-bold uppercase tracking-widest">
                   <span>Subtotal</span>
-                  <span className="text-white">
+                  <span className="font-black text-[var(--market-leaf)]">
                     ¥{subtotal.toLocaleString()}
                   </span>
                 </div>
-                <div className="flex justify-between text-gray-400 text-xs font-bold uppercase tracking-widest">
+                <div className="flex justify-between text-slate-500 text-xs font-bold uppercase tracking-widest">
                   <span>Tax (8%)</span>
-                  <span className="text-white">¥{tax.toLocaleString()}</span>
+                  <span className="text-slate-800">
+                    ¥{tax.toLocaleString()}
+                  </span>
                 </div>
-                <div className="flex justify-between text-gray-400 text-xs font-bold uppercase tracking-widest pb-4 border-b border-white/10">
+                <div className="flex justify-between border-b border-slate-200 pb-4 text-slate-500 text-xs font-bold uppercase tracking-widest">
                   <span>Shipping</span>
-                  <span className="text-white">
+                  <span className="text-slate-800">
                     ¥{shippingFee.toLocaleString()}
                   </span>
                 </div>
@@ -294,7 +296,7 @@ const CartPage = () => {
                   <span className="text-lg font-black uppercase">
                     Grand Total
                   </span>
-                  <span className="text-4xl font-black text-[#4ADE80]">
+                  <span className="text-4xl font-black text-[var(--market-leaf)]">
                     ¥{total.toLocaleString()}
                   </span>
                 </div>
@@ -303,7 +305,7 @@ const CartPage = () => {
               <Button
                 onClick={handleCheckout}
                 disabled={isPlacingOrder}
-                className="w-full bg-[#1F5E3B] hover:bg-[#287a4d] text-white rounded-2xl h-16 font-black text-lg gap-3 transition-all active:scale-95 group border-none"
+                className="group h-14 w-full gap-3 rounded-lg border-none bg-[var(--market-leaf)] text-lg font-black text-white transition-all hover:bg-[var(--market-leaf-deep)] active:scale-95"
               >
                 {isPlacingOrder ? (
                   <Loader2 className="animate-spin" />

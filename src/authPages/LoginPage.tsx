@@ -22,7 +22,7 @@ const LoginPage = () => {
         icon: "success",
         timer: 2000,
         showConfirmButton: false,
-        iconColor: "#1F5E3B", // Apnar brand color
+        iconColor: "#d71920",
         didOpen: (modal) => {
           modal.style.borderRadius = "2rem";
         },
@@ -36,93 +36,124 @@ const LoginPage = () => {
         text:
           err?.data?.message || "Invalid email or password. Please try again.",
         icon: "error",
-        confirmButtonColor: "#1F5E3B",
+        confirmButtonColor: "#d71920",
         confirmButtonText: "Try Again",
       });
     }
   };
 
   return (
-    <div className="notranslate min-h-screen flex items-center justify-center bg-[#F4F7F4] p-4 font-sans">
-      <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl shadow-green-900/5 p-10 border border-gray-100">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#1F5E3B]/10 rounded-2xl mb-4">
-            <LogIn className="text-[#1F5E3B]" size={32} />
-          </div>
-          <h2 className="text-3xl font-black text-[#1A2E1A] tracking-tight">
-            Welcome Back
-          </h2>
-          <p className="text-gray-500 mt-2 text-sm">
-            Sign in to continue your halal shopping
+    <div className="notranslate min-h-screen bg-white font-sans lg:grid lg:grid-cols-2">
+      <section className="relative flex min-h-[230px] items-end overflow-hidden bg-slate-900 px-6 py-7 sm:min-h-[280px] lg:min-h-screen lg:px-12 lg:py-14">
+        <img
+          src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1800&q=85"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent" />
+        <Link
+          to="/"
+          className="absolute left-6 top-6 z-10 flex items-center gap-2 text-sm font-black text-white sm:left-8 sm:top-8"
+        >
+          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-white text-lg text-[var(--market-leaf)]">
+            ✦
+          </span>
+          MainichiHalal Shop
+        </Link>
+        <div className="relative z-10 max-w-xl text-white">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-white/80">
+            Your everyday halal grocery
+          </p>
+          <h1 className="text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">
+            Good food, ready for your table.
+          </h1>
+          <p className="mt-3 max-w-md text-sm leading-relaxed text-white/80 sm:text-base">
+            Sign in to pick up where you left off and keep your basket close.
           </p>
         </div>
+      </section>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">
-              Email Address
-            </label>
-            <div className="relative">
-              <Mail
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
-              <input
-                type="email"
-                required
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:border-[#1F5E3B] focus:ring-4 focus:ring-[#1F5E3B]/10 transition-all outline-none"
-                placeholder="example@mail.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+      <main className="flex items-center justify-center px-5 py-10 sm:px-8 lg:px-12">
+        <div className="w-full max-w-md">
+          <div className="mb-8">
+            <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-red-50">
+              <LogIn className="text-[var(--market-leaf)]" size={24} />
             </div>
+            <h2 className="text-3xl font-black tracking-tight text-slate-900">
+              Welcome Back
+            </h2>
+            <p className="mt-2 text-sm text-slate-500">
+              Sign in to continue your halal shopping
+            </p>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">
-              Password
-            </label>
-            <div className="relative">
-              <Lock
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
-              <input
-                type="password"
-                required
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:border-[#1F5E3B] focus:ring-4 focus:ring-[#1F5E3B]/10 transition-all outline-none"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <label className="ml-1 text-xs font-bold uppercase tracking-widest text-slate-500">
+                Email Address
+              </label>
+              <div className="relative">
+                <Mail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
+                <input
+                  type="email"
+                  required
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 outline-none transition-all focus:border-[var(--market-leaf)] focus:bg-white focus:ring-4 focus:ring-red-100"
+                  placeholder="example@mail.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
             </div>
-          </div>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-[#1F5E3B] text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[#16452B] active:scale-[0.98] transition-all shadow-xl shadow-green-900/20 disabled:opacity-70"
-          >
-            {isLoading ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              <>
-                Sign In <ArrowRight size={18} />
-              </>
-            )}
-          </button>
-        </form>
+            <div className="space-y-2">
+              <label className="ml-1 text-xs font-bold uppercase tracking-widest text-slate-500">
+                Password
+              </label>
+              <div className="relative">
+                <Lock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
+                <input
+                  type="password"
+                  required
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 outline-none transition-all focus:border-[var(--market-leaf)] focus:bg-white focus:ring-4 focus:ring-red-100"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+            </div>
 
-        <p className="text-center mt-8 text-gray-500 text-sm">
-          New here?{" "}
-          <Link
-            to="/register"
-            className="text-[#1F5E3B] font-bold hover:underline"
-          >
-            Create an Account
-          </Link>
-        </p>
-      </div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--market-leaf)] py-4 font-bold text-white shadow-sm transition-colors hover:bg-[var(--market-leaf-deep)] disabled:opacity-70"
+            >
+              {isLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <>
+                  Sign In <ArrowRight size={18} />
+                </>
+              )}
+            </button>
+          </form>
+
+          <p className="mt-8 text-center text-sm text-slate-500">
+            New here?{" "}
+            <Link
+              to="/register"
+              className="font-bold text-[var(--market-leaf)] hover:underline"
+            >
+              Create an Account
+            </Link>
+          </p>
+        </div>
+      </main>
     </div>
   );
 };

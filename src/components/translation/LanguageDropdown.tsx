@@ -31,19 +31,22 @@ export const LanguageDropdown = ({
 
   useEffect(() => {
     let isMounted = true;
+    let attempts = 0;
+    let retryTimer: number | undefined;
     const checkReady = () => {
       if (!isMounted) return;
       if (isTranslateReady()) {
         setReady(true);
         loadSavedLanguage();
-      } else {
-        setTimeout(checkReady, 300);
+      } else if (attempts < 10) {
+        attempts += 1;
+        retryTimer = window.setTimeout(checkReady, 300);
       }
     };
-    const timer = setTimeout(checkReady, 500);
+    retryTimer = window.setTimeout(checkReady, 500);
     return () => {
       isMounted = false;
-      clearTimeout(timer);
+      if (retryTimer !== undefined) window.clearTimeout(retryTimer);
     };
   }, []);
 

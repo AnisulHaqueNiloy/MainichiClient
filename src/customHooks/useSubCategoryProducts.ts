@@ -1,8 +1,9 @@
 import { useGetProductsQuery } from "@/redux/features/admin/products";
 
 export const useSubCategoryProducts = (
-  subCategoryId: number,
+  subCategoryId: string | number,
   limit: number = 5,
+  skip = false,
 ) => {
   // Query object-ta dynamic vabe banano holo
   const queryParams = {
@@ -15,7 +16,7 @@ export const useSubCategoryProducts = (
     queryParams,
     {
       // Jodi subCategoryId na thake, tobe call korbe na (Skip logic)
-      skip: !subCategoryId,
+      skip: !subCategoryId || skip,
     },
   );
 

@@ -1,4 +1,10 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import {
+  createBrowserRouter,
+  isRouteErrorResponse,
+  Link,
+  Navigate,
+  useRouteError,
+} from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import Home from "../public_pages/home/Home";
 import SearchPage from "../public_pages/search/SearchPage";
@@ -27,14 +33,42 @@ import ReturnPolicy from "@/public_pages/ReturnPolicy/ReturnPolicy";
 import TermsPage from "@/public_pages/TermsPage";
 import Contact from "@/public_pages/Contact";
 import SupportPage from "@/public_pages/SupportPage";
-import { useEffect } from "react";
 import PrivacyPolicyPage from "../public_pages/PrivacyPolicyPage";
+import UserGuard from "./UserGuard";
 function ErrorBoundary() {
-  useEffect(() => {
-    window.location.reload();
-  }, []);
+  const error = useRouteError();
+  const message = isRouteErrorResponse(error)
+    ? `${error.status} ${error.statusText}`
+    : "This page could not be loaded.";
 
-  return null;
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-5 py-12">
+      <section className="w-full max-w-lg border border-slate-200 bg-white p-8 shadow-sm">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--market-leaf)]">
+          Page error
+        </p>
+        <h1 className="mt-3 text-2xl font-black text-slate-900">
+          We couldn&apos;t open this page
+        </h1>
+        <p className="mt-2 text-sm text-slate-600">{message}</p>
+        <div className="mt-6 flex gap-3">
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="rounded-md bg-[var(--market-leaf)] px-4 py-2.5 text-sm font-bold text-white hover:bg-[var(--market-leaf-deep)]"
+          >
+            Try again
+          </button>
+          <Link
+            to="/"
+            className="rounded-md border border-slate-300 px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50"
+          >
+            Back to shop
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
 }
 export const router = createBrowserRouter([
   {
@@ -90,15 +124,20 @@ export const router = createBrowserRouter([
   },
   {
     path: "/user",
-    element: <UserLayout />,
+    element: <UserGuard />,
     children: [
       {
-        index: true,
-        element: <UserOrderList />,
-      },
-      {
-        path: "profile",
-        element: <ProfileSetting />,
+        element: <UserLayout />,
+        children: [
+          {
+            index: true,
+            element: <UserOrderList />,
+          },
+          {
+            path: "profile",
+            element: <ProfileSetting />,
+          },
+        ],
       },
     ],
   },

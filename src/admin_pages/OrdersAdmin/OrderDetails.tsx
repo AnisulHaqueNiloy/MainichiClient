@@ -15,6 +15,7 @@ import {
   Loader2
 } from "lucide-react";
 import { useGetOrderDetailsQuery } from "@/redux/features/admin/adminOrderApi";
+import { getImageUrl } from "@/lib/utils";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -76,7 +77,14 @@ const OrderDetails = () => {
                 {order?.orderItems.map((item: any, idx: number) => (
                   <div key={idx} className="flex items-center gap-4">
                     <div className="h-20 w-20 rounded-2xl border border-gray-100 overflow-hidden bg-gray-50 shrink-0">
-                      <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+                      <img
+                        src={getImageUrl(item.image)}
+                        onError={(e) => {
+                          e.currentTarget.src = "/placeholder.png";
+                        }}
+                        alt={item.name}
+                        className="h-full w-full object-cover"
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-bold text-[#1A2E1A] text-lg truncate">{item.name}</h4>

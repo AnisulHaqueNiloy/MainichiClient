@@ -26,8 +26,7 @@ import {
   useGetProductBySlugQuery,
 } from "@/redux/features/admin/products";
 import { useGetMeQuery } from "@/redux/features/authApi";
-
-const IMG_URL = import.meta.env.VITE_API_URL;
+import { getImageUrl } from "@/lib/utils";
 
 const ProductDetails = ({ initialProduct }: { initialProduct?: any }) => {
   const { slug } = useParams();
@@ -83,7 +82,7 @@ const ProductDetails = ({ initialProduct }: { initialProduct?: any }) => {
   }
 
   const images =
-    product?.images?.map((img: string) => `${IMG_URL}${img}`) || [];
+    product?.images?.map((img: string) => getImageUrl(img)) || [];
 
   const handleAddToCart = () => {
     dispatch(

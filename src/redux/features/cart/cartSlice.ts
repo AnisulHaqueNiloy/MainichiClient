@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { getImageUrl } from "@/lib/utils";
 
 // Product type define kora
 export interface CartItem {
@@ -19,7 +20,18 @@ interface CartState {
 const loadCartFromStorage = (): CartItem[] => {
   if (typeof window !== "undefined") {
     const savedCart = localStorage.getItem("cartItems");
-    return savedCart ? JSON.parse(savedCart) : [];
+    if (!savedCart) return [];
+    try {
+      const items: CartItem[] = JSON.parse(savedCart);
+      return Array.isArray(items)
+        ? items.map((item) => ({
+            ...item,
+            img: getImageUrl(item.img),
+          }))
+        : [];
+    } catch {
+      return [];
+    }
   }
   return [];
 };
@@ -33,14 +45,18 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<CartItem>) => {
+      const itemPayload = {
+        ...action.payload,
+        img: getImageUrl(action.payload.img),
+      };
       const existingItem = state.items.find(
-        (item) => item.id === action.payload.id,
+        (item) => item.id === itemPayload.id,
       );
 
       if (existingItem) {
-        existingItem.qty += action.payload.qty;
+        existingItem.qty += itemPayload.qty;
       } else {
-        state.items.push(action.payload);
+        state.items.push(itemPayload);
       }
 
       localStorage.setItem("cartItems", JSON.stringify(state.items));

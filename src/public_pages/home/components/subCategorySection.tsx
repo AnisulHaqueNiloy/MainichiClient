@@ -2,8 +2,7 @@ import { ShoppingCart, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/redux/features/cart/cartSlice";
-
-const IMG_URL = import.meta.env.VITE_API_URL;
+import { getImageUrl } from "@/lib/utils";
 import { useSubCategoryProducts } from "@/customHooks/useSubCategoryProducts";
 
 export const SubCategorySection = ({
@@ -50,12 +49,7 @@ export const SubCategorySection = ({
                   </span>
                 )}
                 <img
-                  // Backend theke asha image path fix (http://localhost:5000 add kora hoyeche)
-                  src={
-                    product.images?.[0]
-                      ? `${IMG_URL}${product.images[0]}`
-                      : "/placeholder.png"
-                  }
+                  src={getImageUrl(product.images?.[0])}
                   alt={product.name}
                   className="w-full h-full  transition-transform duration-700 group-hover:scale-105"
                 />
@@ -71,9 +65,7 @@ export const SubCategorySection = ({
                         name: product.title,
                         price: product.price,
                         qty: 1,
-                        img: product.images?.[0]
-                          ? `${IMG_URL}${product.images[0]}`
-                          : "/placeholder.png",
+                        img: getImageUrl(product.images?.[0]),
                         desc: product.desc,
                         slug: product.slug,
                       }),

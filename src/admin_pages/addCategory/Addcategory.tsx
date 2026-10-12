@@ -1,5 +1,5 @@
 import { useState } from "react";
-const IMG_URL = import.meta.env.VITE_API_URL;
+import { getImageUrl } from "@/lib/utils";
 import { Plus, Layers, Image as ImageIcon, Trash2 } from "lucide-react";
 import {
   useGetCategoriesQuery,
@@ -232,7 +232,7 @@ const AddCategory = () => {
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-14 h-14 bg-white rounded-2xl p-1 shadow-sm border border-gray-50 flex items-center justify-center overflow-hidden">
                   <img
-                    src={`${IMG_URL}${cat.image}`}
+                    src={getImageUrl(cat.image)}
                     className="w-full h-full object-contain rounded-xl"
                     alt={cat.name}
                   />
@@ -251,7 +251,7 @@ const AddCategory = () => {
                   >
                     {sub.image && (
                       <img
-                        src={`${IMG_URL}${sub?.image}`}
+                        src={getImageUrl(sub?.image)}
                         className="w-4 h-4 object-contain rounded-sm"
                         alt=""
                       />

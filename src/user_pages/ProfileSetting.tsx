@@ -5,9 +5,7 @@ import {
   useGetMeQuery,
   useUpdateProfileMutation,
 } from "@/redux/features/authApi";
-
-// Base URL configuration
-const IMG_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import { getImageUrl } from "@/lib/utils";
 
 const ProfileSetting = () => {
   const { data: userData, isLoading: profileLoading } =
@@ -28,12 +26,8 @@ const ProfileSetting = () => {
     if (userData) {
       setFormData((prev) => ({ ...prev, name: userData.name }));
 
-      // Jodi image URL "http" diye shuru na hoy, tobe age IMG_URL add hobe
       if (userData.image) {
-        const fullImageUrl = userData.image.startsWith("http")
-          ? userData.image
-          : `${IMG_URL}${userData.image}`;
-        setPreview(fullImageUrl);
+        setPreview(getImageUrl(userData.image));
       }
     }
   }, [userData]);

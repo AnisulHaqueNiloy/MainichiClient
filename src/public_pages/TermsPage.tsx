@@ -1,8 +1,14 @@
 import { CreditCard, Truck, ShieldCheck } from "lucide-react";
+import SEO from "../components/shared/SEO";
 
 const TermsPage = () => {
   return (
     <div className="max-w-4xl mx-auto py-16 px-6 font-sans text-[#1A2E1A]">
+      <SEO
+        title="Terms & Conditions"
+        description="Review the terms, cash-on-delivery payment policy, and conditions for ordering halal food and groceries at Mainichi Halal Shop Japan."
+        url="/terms"
+      />
       <header className="mb-12 text-center">
         <h1 className="text-4xl font-black uppercase mb-4">
           Terms & Conditions

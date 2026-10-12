@@ -8,6 +8,7 @@ import {
   Instagram,
   MessageSquare,
 } from "lucide-react";
+import SEO from "@/components/shared/SEO";
 
 const Contact = () => {
   const contactInfo = [
@@ -37,6 +38,11 @@ const Contact = () => {
 
   return (
     <div className="py-20 px-6 bg-white text-[#1A2E1A]">
+      <SEO
+        title="Contact Us & Store Information"
+        description="Get in touch with Mainichi Halal Food Shop in Tokyo, Japan. Reach us via phone (04-7481-4515), email, or visit us for your halal grocery needs."
+        url="/contact"
+      />
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16">

@@ -1,8 +1,14 @@
 import { UserRound, LockKeyhole, ShieldCheck } from "lucide-react";
+import SEO from "../components/shared/SEO";
 
 const PrivacyPolicyPage = () => {
   return (
     <div className="max-w-4xl mx-auto py-16 px-6 font-sans text-[#1A2E1A]">
+      <SEO
+        title="Privacy Policy"
+        description="Learn how Mainichi Halal Food Shop protects your personal information and privacy when shopping for halal groceries in Japan."
+        url="/privacy-policy"
+      />
       <header className="mb-12 text-center">
         <h1 className="text-4xl font-black uppercase mb-4">Privacy Policy</h1>
         <p className="text-gray-500">

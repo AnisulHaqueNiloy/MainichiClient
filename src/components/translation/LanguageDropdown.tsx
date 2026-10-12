@@ -1,7 +1,11 @@
 // LanguageDropdown.tsx
 
 import { useCallback, useEffect, useState } from "react";
-import { changeLanguage, isTranslateReady } from "./useGoogleTranslate";
+import {
+  changeLanguage,
+  isTranslateReady,
+  loadGoogleTranslateScript,
+} from "./useGoogleTranslate";
 import { ChevronDown } from "lucide-react"; // ChevronDown use kora standard
 
 export interface Language {
@@ -27,28 +31,6 @@ export const LanguageDropdown = ({
     languages[0],
   );
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-    let attempts = 0;
-    let retryTimer: number | undefined;
-    const checkReady = () => {
-      if (!isMounted) return;
-      if (isTranslateReady()) {
-        setReady(true);
-        loadSavedLanguage();
-      } else if (attempts < 10) {
-        attempts += 1;
-        retryTimer = window.setTimeout(checkReady, 300);
-      }
-    };
-    retryTimer = window.setTimeout(checkReady, 500);
-    return () => {
-      isMounted = false;
-      if (retryTimer !== undefined) window.clearTimeout(retryTimer);
-    };
-  }, []);
 
   const loadSavedLanguage = useCallback(() => {
     const savedLanguage = localStorage.getItem("selectedLanguage");
@@ -67,30 +49,48 @@ export const LanguageDropdown = ({
     }
   }, []);
 
+  useEffect(() => {
+    let isMounted = true;
+    loadGoogleTranslateScript()
+      .then(() => {
+        if (isMounted) {
+          loadSavedLanguage();
+        }
+      })
+      .catch((err) => {
+        console.error("[LanguageDropdown] Failed to init translate:", err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [loadSavedLanguage]);
+
   const handleLanguageChange = useCallback(
     async (language: Language) => {
-      if (!ready) return;
-
       setSelectedLanguage(language);
       setIsDropdownOpen(false);
 
       try {
         localStorage.setItem("selectedLanguage", JSON.stringify(language));
         if (onLanguageChange) onLanguageChange(language);
+        if (!isTranslateReady()) {
+          await loadGoogleTranslateScript();
+        }
         await changeLanguage(language.code);
       } catch (error) {
         console.error("[LanguageDropdown] Error changing language:", error);
       }
     },
-    [ready, onLanguageChange],
+    [onLanguageChange],
   );
 
   return (
     <div className="relative inline-block text-left">
       <button
+        type="button"
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         className="flex items-center bg-white text-[#1F5E3B] border border-gray-200 space-x-2 text-sm px-3 py-2 cursor-pointer rounded-full hover:bg-gray-50 transition-all shadow-sm font-bold"
-        disabled={!ready}
       >
         <span className="text-xl">{selectedLanguage.flag}</span>
         <span className="hidden md:inline">{selectedLanguage.name}</span>
